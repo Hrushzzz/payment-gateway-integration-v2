@@ -1,0 +1,43 @@
+Today's agenda:
+
+1. Integrate Stripe to get the payment
+2. Configuring Callback/Redirect url while calling stripe
+3. Implementing Webhook APIs (small demo)
+4. Intro to Reconciliation
+
+
+Webhook APIs:
+
+Client --> Amazon --> checkout --> Amazon's Payment page --> Stripe page(this is where you pay)
+
+Pending -- >  Confirmed
+
+Webhook APIs is the endpoint exposed by any commerce application
+which will be called by Payment gateways to confirm the status of the payment.
+
+Payment service should also have a webhook endpoint(to be called by Stripe)
+
+As of now, where is payment service running? - localhost:8080
+
+Will Stripe be able to reach out directly to this address (localhost:8080)?
+No, because localhost is not accessible from outside the machine.
+We need to expose our local server to the internet using a tool like ngrok.
+
+Ngrok is a tool that exposes your local server to the internet using a secure tunnel.
+
+localhost:8080 --> ngrok --> https://<random-string>.ngrok.io
+
+
+Reconciliation:
+
+1. User goes to Amazon.
+2. User selects 2 products
+3. User goes to checkout
+4. User is redirected to Stripe and makes the payment
+5. Payment didn't go through due to some reason (both redirect and webhook failed to inform)
+6. Ideally customer should get a refund
+
+
+Amazon checks and finds out
+payment - confirmed
+order - pending/ cancelled -- Amazon should refund
